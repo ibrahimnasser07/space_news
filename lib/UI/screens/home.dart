@@ -11,37 +11,33 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Box settings = Hive.box(settingsBox);
+    final strings = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.helloWorld)),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ValueListenableBuilder(
-            valueListenable: Hive.box(settingsBox).listenable(),
-            builder: (context, box, _) {
-              String language = settings.get(languageValue, defaultValue: "en");
-              return Switch(
-                value: language == "en",
-                onChanged: (val) =>
-                    settings.put(languageValue, val ? "en" : "ar"),
-              );
-            },
-          ),
-          ValueListenableBuilder(
-            valueListenable: Hive.box(settingsBox).listenable(),
-            builder: (context, box, _) {
-              bool darkMode = settings.get(darkModeValue, defaultValue: false);
-              return Switch(
-                value: darkMode,
-                onChanged: (val) {
-                  settings.put(darkModeValue, !darkMode);
-                },
-              );
-            },
+          DropdownButton<String>(
+              value: settings.get(languageValue),
+              items: <String>["en", "ar"]
+                  .map(
+                    (e) => DropdownMenuItem<String>(value: e, child: Text(e)),
+                  )
+                  .toList(),
+              onChanged: (locale) => settings.put(languageValue, locale)),
+          Switch(
+            value: settings.get(darkModeValue),
+            onChanged: (val) => settings.put(darkModeValue, val),
           ),
           FilledButton(
-            onPressed: () => context.push(news),
-            child: Text("News"),
+            onPressed: () => context.push(news,extra: "Mohamed Ahmed"),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: Text(
+              strings.news,
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
           )
         ],
       ),

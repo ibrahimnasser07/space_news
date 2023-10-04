@@ -8,7 +8,7 @@ final textTheme = TextTheme(
     height: 64 / 57,
     letterSpacing: -0.25,
   ),
-  displayMedium: GoogleFonts.inter(
+  displayMedium: GoogleFonts.cairo(
     fontWeight: FontWeight.w400,
     fontSize: 45,
     height: 52 / 45,

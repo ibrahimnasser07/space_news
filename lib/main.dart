@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       ],
       child: ValueListenableBuilder(
         valueListenable: Hive.box(settingsBox).listenable(),
-        builder: (context, box, _) {
+        builder: (__, box, _) {
           bool darkMode = box.get(darkModeValue, defaultValue: false);
           String language = box.get(languageValue, defaultValue: "en");
           return MaterialApp.router(
