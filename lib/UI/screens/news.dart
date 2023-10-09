@@ -14,7 +14,7 @@ class News extends StatelessWidget {
               context.go("/");
             },
             child: Text(
-              "Home",
+              "News Page",
               style: Theme.of(context).textTheme.bodyLarge,
             )),
       ),

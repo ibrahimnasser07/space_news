@@ -1,4 +1,6 @@
 {
-  "helloWorld": "Hello World!",
+  "app_title": "NASA News",
+  "language": "Language",
+  "theme": "Theme",
   "news": "News"
 }

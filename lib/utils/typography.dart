@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 
 final textTheme = TextTheme(
   displayLarge: GoogleFonts.inter(
     fontWeight: FontWeight.w400,
-    fontSize: 57,
+    fontSize: 57.sp,
     height: 64 / 57,
     letterSpacing: -0.25,
   ),
@@ -65,14 +66,14 @@ final textTheme = TextTheme(
     fontSize: 11,
     height: 16 / 11,
   ),
-  bodyLarge: GoogleFonts.fuggles(
+  bodyLarge: GoogleFonts.inter(
     fontWeight: FontWeight.w400,
-    fontSize: 50,
+    fontSize: 13,
     height: 24 / 16,
   ),
   bodyMedium: GoogleFonts.inter(
     fontWeight: FontWeight.w400,
-    fontSize: 14,
+    fontSize: 16.sp,
     height: 20 / 14,
   ),
   bodySmall: GoogleFonts.inter(
