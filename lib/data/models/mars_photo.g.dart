@@ -21,7 +21,7 @@ class MarsPhotoAdapter extends TypeAdapter<MarsPhoto> {
       sol: fields[1] as int,
       camera: fields[2] as Camera,
       imgSrc: fields[3] as String,
-      earthDate: fields[4] as String,
+      earthDate: fields[4] as DateTime,
     );
   }
 
@@ -101,11 +101,11 @@ MarsPhoto _$MarsPhotoFromJson(Map<String, dynamic> json) => MarsPhoto(
       sol: json['sol'] as int,
       camera: Camera.fromJson(json['camera'] as Map<String, dynamic>),
       imgSrc: json['img_src'] as String,
-      earthDate: json['earth_date'] as String,
+      earthDate: MarsPhoto._fromDate(json['earth_date'] as String),
     );
 
 Camera _$CameraFromJson(Map<String, dynamic> json) => Camera(
       id: json['id'] as int,
       name: json['name'] as String,
-      fullName: Camera._toCapital(json['full_name'] as String),
+      fullName: json['full_name'] as String,
     );

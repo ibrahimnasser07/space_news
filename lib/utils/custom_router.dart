@@ -10,15 +10,12 @@ class AppRouter {
     routes: <RouteBase>[
       GoRoute(
         path: '/',
-        builder: (context, state) => const Home(),
+        builder: (__, _) => const Home(),
       ),
       GoRoute(
         path: news,
         builder: (context, state) => const News(),
       ),
     ],
-    errorBuilder: (context, state) {
-      return const Home();
-    },
   );
 }
