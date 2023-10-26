@@ -5,13 +5,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:space_news/utils/constants.dart';
 import 'package:space_news/utils/custom_router.dart';
 import 'package:sizer/sizer.dart';
+import 'package:space_news/utils/hive_managment.dart';
 
 import 'utils/typography.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  await Hive.openBox(settingsBox);
+  await HiveManagment.initHive();
   runApp(MyApp(appRouter: AppRouter()));
 }
 
@@ -27,29 +27,27 @@ class MyApp extends StatelessWidget {
       builder: (__, box, _) {
         bool darkMode = box.get(darkModeValue, defaultValue: false);
         String language = box.get(languageValue, defaultValue: "en");
-        return Sizer(
-            builder: (context, orientation, deviceType) {
-            return MaterialApp.router(
-              title: nasaNews,
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              locale: Locale(language),
-              themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
-              theme: ThemeData(
-                colorScheme: lightColorScheme,
-                textTheme: textTheme,
-                useMaterial3: true,
-              ),
-              darkTheme: ThemeData(
-                colorScheme: darkColorScheme,
-                textTheme: textTheme,
-                useMaterial3: true,
-              ),
-              routerConfig: appRouter.router,
-            );
-          }
-        );
+        return Sizer(builder: (context, orientation, deviceType) {
+          return MaterialApp.router(
+            title: nasaNews,
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: Locale(language),
+            themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
+            theme: ThemeData(
+              colorScheme: lightColorScheme,
+              textTheme: textTheme,
+              useMaterial3: true,
+            ),
+            darkTheme: ThemeData(
+              colorScheme: darkColorScheme,
+              textTheme: textTheme,
+              useMaterial3: true,
+            ),
+            routerConfig: appRouter.router,
+          );
+        });
       },
     );
   }

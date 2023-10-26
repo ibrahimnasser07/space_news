@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
-import 'package:space_news/data/API/api.dart';
+import 'package:space_news/data/models/mars_photo.dart';
+import 'package:space_news/data/repo/repo.dart';
 import 'package:space_news/utils/route_constants.dart';
 
 import '../widgets/home_drawer.dart';
@@ -13,7 +14,6 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context)!;
-    final _api = API();
     return Scaffold(
       appBar: AppBar(title: Text(strings.app_title)),
       body: Column(
@@ -35,10 +35,16 @@ class Home extends StatelessWidget {
         ],
       ),
       drawer: const HomeDrawer(),
-      floatingActionButton:
-          FloatingActionButton(onPressed: () {
-            _api.fetchPhotos(DateTime.now());
-          }, child: const Icon(Icons.abc)),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            List<MarsPhoto> photos =
+                await Repo().fetchPhotos(DateTime(2023, 9, 26));
+            debugPrint(photos.length.toString());
+            if (photos.isNotEmpty) {
+              debugPrint(photos[0].imgSrc);
+            }
+          },
+          child: const Icon(Icons.abc)),
     );
   }
 }
