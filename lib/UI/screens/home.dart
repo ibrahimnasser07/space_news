@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:sizer/sizer.dart';
-import 'package:space_news/data/models/mars_photo.dart';
-import 'package:space_news/data/repo/repo.dart';
-import 'package:space_news/utils/route_constants.dart';
+import 'package:intl/intl.dart';
+import 'package:space_news/bloc/mars_photos/mars_photos_cubit.dart';
 
 import '../widgets/home_drawer.dart';
+import '../widgets/mars_photo_card.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -14,37 +13,59 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(strings.app_title)),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(width: double.infinity),
-          SizedBox(
-            width: 80.w,
-            child: FilledButton(
-              onPressed: () => context.push(news),
-              child: Text(
-                strings.news,
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-            ),
-          )
-        ],
-      ),
-      drawer: const HomeDrawer(),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            List<MarsPhoto> photos =
-                await Repo().fetchPhotos(DateTime(2023, 9, 26));
-            debugPrint(photos.length.toString());
-            if (photos.isNotEmpty) {
-              debugPrint(photos[0].imgSrc);
-            }
+    return BlocProvider(
+      create: (context) => MarsPhotosCubit(),
+      child: Scaffold(
+        appBar: AppBar(title: Text(strings.app_title)),
+        body: BlocBuilder<MarsPhotosCubit, MarsPhotosState>(
+          builder: (context, state) {
+            final MarsPhotosCubit cubit = context.read<MarsPhotosCubit>();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ListTile(
+                  title: const Text("Select Date"),
+                  trailing: const Icon(Icons.calendar_month),
+                  onTap: () async {
+                    final selectedDate = await showDatePicker(
+                      context: context,
+                      initialDate: cubit.selectedDate ??
+                          DateTime.now().subtract(
+                            const Duration(days: 30),
+                          ),
+                      firstDate: DateTime(2018),
+                      lastDate: DateTime.now(),
+                    );
+                    cubit.changeSelectedDate(selectedDate);
+                  },
+                  subtitle: cubit.selectedDate != null
+                      ? Text(DateFormat.yMMMd().format(cubit.selectedDate!))
+                      : null,
+                ),
+                state is MarsPhotosLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : cubit.marsPhotos.isNotEmpty
+                        ? Expanded(
+                            child: ListView.builder(
+                              itemCount: cubit.marsPhotos.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return PhotoCard(
+                                    photo: cubit.marsPhotos[index]);
+                              },
+                            ),
+                          )
+                        : const Expanded(
+                            child: Center(
+                              child: Text("There is no photos"),
+                            ),
+                          ),
+              ],
+            );
           },
-          child: const Icon(Icons.abc)),
+        ),
+        drawer: const HomeDrawer(),
+      ),
     );
   }
 }

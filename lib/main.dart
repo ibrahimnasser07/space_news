@@ -1,5 +1,7 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:space_news/utils/bloc_observer.dart';
 import 'package:space_news/utils/color_schemes.g.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:space_news/utils/constants.dart';
@@ -11,6 +13,7 @@ import 'utils/typography.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = MyBlocObserver();
   await HiveManagment.initHive();
   runApp(MyApp(appRouter: AppRouter()));
 }

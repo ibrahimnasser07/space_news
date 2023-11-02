@@ -4,9 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../utils/api_key.dart';
+
 class API {
   late Dio dio;
-  late String _apiKey;
   late String _baseUrl;
 
   API() {
@@ -30,7 +31,6 @@ class API {
         retryableExtraStatuses: {status403Forbidden},
       ),
     );
-    _apiKey = "IdtPbecKIbVitUBgIIKDFGU4Y2RCfU7OjPTHWx3r";
     _baseUrl =
         "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos";
   }
@@ -42,7 +42,7 @@ class API {
         options: Options(method: "get"),
         queryParameters: {
           "earth_date": earthDate,
-          "api_key": _apiKey,
+          "api_key": apiKey,
         },
       );
       debugPrint("Status code is: ${response.statusCode}");
